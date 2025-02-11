@@ -1,1 +1,0 @@
-# I will do my best to make a simple accleration of how to use code, in general.
