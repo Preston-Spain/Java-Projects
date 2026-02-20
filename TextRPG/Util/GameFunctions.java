@@ -19,9 +19,9 @@ public class GameFunctions {
             if (X) {
                 System.out.println("Try again (Y/N): ");
             }
-            if (userIp == "Y") {
+            if ("Y".equals(userIp)) {
                 return true;
-            } else if (userIp == "N") {
+            } else if ("N".equals(userIp)) {
                 return false;
             }
         }
@@ -34,9 +34,9 @@ public class GameFunctions {
             if (X) {
                 System.out.println("Try again (Y/N): ");
             }
-            if (userIp == "Y") {
+            if ("Y".equals(userIp)) {
                 return true;
-            } else if (userIp == "N") {
+            } else if ("N".equals(userIp)) {
                 return false;
             }
         }
@@ -56,14 +56,15 @@ public class GameFunctions {
         }
 
         if (door.isOpen()) {
-            if (false) {
-
+            if (easyYesNo("Would you like to close the" + door.getName() + " door")) {
+                door.close();
             }
         } else {
             if (easyYesNo("Would you like to open the" + door.getName() + " door")) {
                 door.open();
 
                 if (easyYesNo("Would you like to go through the" + door.getName() + " door")) {
+                    door.goThrough();
                 }
             }
         }
@@ -72,5 +73,9 @@ public class GameFunctions {
 
     public void inspect(Chest chest) {
 
+    }
+
+    public void Update() {
+        // Updates the player if they enter a new room.
     }
 }
