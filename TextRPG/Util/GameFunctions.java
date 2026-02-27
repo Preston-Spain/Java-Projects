@@ -10,12 +10,12 @@ import java.util.Scanner;
 
 public class GameFunctions {
     static Scanner input = new Scanner(System.in);
-    
+
     public static boolean easyYesNo(String dialog) {
         System.out.println(dialog + " (Y/N)");
         return easyYesNo();
     }
-    
+
     public static boolean easyYesNo() {
         while (true) {
             String userIp = input.nextLine().trim().toUpperCase();
@@ -27,10 +27,10 @@ public class GameFunctions {
             System.out.println("Please enter Y or N: ");
         }
     }
-    
-    public void inspect(Door door, Player player) {
+
+    public static void inspect(Door door, Player player) {
         System.out.println(door.getDescription());
-        
+
         if (door.isOpen()) {
             if (easyYesNo("Would you like to close the " + door.getName() + " door?")) {
                 door.close();
@@ -48,33 +48,37 @@ public class GameFunctions {
             }
         }
     }
-    
-    public void inspect(Chest chest, Player player) {
-        chest.showContents();
-        
-        if (!chest.isLocked() && easyYesNo("Would you like to take something?")) {
-            // Add logic for taking items
-            System.out.println("Enter item number to take (or -1 to cancel): ");
-            int choice = input.nextInt();
-            input.nextLine(); // consume newline
-            
-            if (choice >= 0) {
-                Item item = chest.takeItem(choice);
-                if (item != null) {
-                    player.addItem(item);
-                }
+
+    public static void inspect(Chest chest, Player player) {
+        System.out.println(chest.getDescription());
+
+        if (chest.getKey() != null || !chest.isLocked()) {
+            chest.showContents(player);
+        } else {
+            if (easyYesNo("Would you like to try to unlock it?")) {
+                chest.showContents(player);
             }
         }
     }
 
-    public void inspect(SpecialObject object) {
-        
+    public static void inspect(SpecialObject object, Player player) {
+        if (object instanceof Chest) {
+            inspect((Chest) object, player);
+        } else if (object instanceof Door) {
+            inspect((Door) object, player);
+        } else {
+            System.out.println(object.getDescription());
+        }
     }
-    
-    public static void render(Player player) {
+
+    public void inspect(Room room) {
+        System.out.println(room.getDescription());
+    }
+
+    public static boolean render(Player player) {
         System.out.println("\n=== Current Location: " + player.getCurrentRoom().getName() + " ===");
         System.out.println(player.getCurrentRoom().getDescription());
-        Update(player);
+        return Update(player);
     }
 
     public static boolean Update(Player player) {
@@ -92,7 +96,7 @@ public class GameFunctions {
             String ip = input.nextLine();
             try {
                 int i = Integer.parseInt(ip) - 1;
-                inspect(room.getObject(i));
+                inspect(room.getObject(i), player);
             } catch (Exception e) {
                 if (ip.toLowerCase().equals("q")) {
                     return true;
