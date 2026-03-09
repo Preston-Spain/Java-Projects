@@ -98,7 +98,7 @@ public class Property {
                     System.out.printf("%d: %s (%s) - %s%n",
                             i, item.getName(), type, item.getDescription());
 
-                    if (item instanceof Weapon) {
+                    if (item instanceof Weapon || item.getClass() == Weapon.class) {
                         Weapon weapon = (Weapon) item;
                         System.out.printf("   Damage: %d, Crit Rate: %d%%%n",
                                 weapon.getDamage(), weapon.getCritRate());
@@ -115,9 +115,9 @@ public class Property {
                 return;
             }
 
-            if (item instanceof Key) {
+            if (item instanceof Key || item.getClass() == Key.class) {
                 System.out.println("You can use keys on doors or chests.");
-            } else if (item instanceof Weapon) {
+            } else if (item instanceof Weapon || item.getClass() == Weapon.class) {
                 System.out.println("You equip the " + item.getName() + ".");
                 // Handle weapon equipping logic
             } else {
@@ -283,23 +283,6 @@ public class Property {
             itemList.add(item);
         }
 
-        // public void lockInteract(Player player) {
-        // if (player.hasKey(this.key)) {
-        // if (isLocked) {
-        // System.out.println("Locked chest " + name);
-        // } else {
-        // System.out.println("UnLocked chest " + name);
-        // }
-        // isLocked = !isLocked;
-        // } else if (this.key == null) {
-        // System.out.println("Does not have a lock on it");
-        // } else {
-        // System.out
-        // .println("You do not have the proper key, this chest requires the " +
-        // this.key.getName() + ".");
-        // }
-        // }
-
         public void removeItem(int index) {
             if (index >= 0 && index < itemList.size()) {
                 itemList.remove(index); // removes and returns
@@ -321,42 +304,12 @@ public class Property {
                     System.out.println("The chest is empty.");
                 } else {
                     for (int i = 0; i < itemList.size(); i++) {
-                        System.out.println(i + ": " + itemList.get(i));
+                        System.out.println(i + ": " + itemList.get(i).getName());
                     }
                 }
-                if (GameFunctions.easyYesNo("Would you like to take something?")) {
-                    System.out.println("Enter item number to take (or -1 to cancel): ");
-                    int choiceTake = GameFunctions.input.nextInt();
-                    GameFunctions.input.nextLine(); // consume newline
-
-                    if (choiceTake >= 0 && choiceTake < itemList.size()) {
-                        Item item = itemList.remove(choiceTake);
-                        player.addItem(item);
-                        System.out.println("You took the " + item.getName() + ".");
-                    } else if (choiceTake != -1) {
-                        System.out.println("Invalid item number.");
-                    }
-                }
-                if (GameFunctions.easyYesNo("Would you like to leave something?")) {
-                    player.showInventory();
-                    System.out.println("Enter item number to leave (or -1 to cancel): ");
-                    int choiceLeave = GameFunctions.input.nextInt();
-                    GameFunctions.input.nextLine(); // consume newline
-
-                    if (choiceLeave >= 0 && choiceLeave < player.inventory.size()) {
-                        Item item = player.removeItem(choiceLeave);
-                        if (item != null) {
-                            itemList.add(item);
-                            System.out.println("You left the " + item.getName() + " in the chest.");
-                        }
-                    } else if (choiceLeave != -1) {
-                        System.out.println("Invalid item number.");
-                    }
-                }
-
             } else {
                 System.out.println(name + " is locked.");
-                System.out.println("You need the " + key + ".");
+                System.out.println("You need the " + key.getName() + ".");
             }
         }
 
@@ -377,6 +330,10 @@ public class Property {
         public Key getKey() {
             return key;
         }
+
+        public Object fetch() {
+            return Key.class;
+        }
     }
 
     public static class Room {
@@ -389,6 +346,18 @@ public class Property {
             this.description = description;
             this.objects = new ArrayList<>();
         }
+
+        // public Room(String name, String description, List<SpecialObject> obj) {
+        //     this.name = name;
+        //     this.description = description;
+        //     this.objects = obj;
+        // }
+
+        // public Room(String name, String description, SpecialObject... objs) {
+        //     this.name = name;
+        //     this.description = description;
+        //     this.objects.addAll(Arrays.asList(objs));
+        // }
 
         public void addObject(SpecialObject object) {
             this.objects.add(object);
@@ -416,6 +385,10 @@ public class Property {
                 }
                 num += 1;
             }
+        }
+
+        private void updateList() {
+            int helper = this.objects.size();
         }
 
         public String getName() {

@@ -28,6 +28,10 @@ public class GameFunctions {
         }
     }
 
+    private static void debugPrint(String x) {
+        System.out.print(Constants.debug ? x + "\n": "");
+    }
+
     public static void inspect(Door door, Player player) {
         System.out.println(door.getDescription());
 
@@ -85,11 +89,13 @@ public class GameFunctions {
         Room room = player.getCurrentRoom();
         int roomSize = room.sizeObject();
 
-        for (int i = 0; i < roomSize; i++) {
-            System.out.println((i + 1) + " : " + room.getObject(i).getName());
-        }
-
         while (true) {
+
+            System.out.println("");
+            for (int i = 0; i < roomSize; i++) {
+                System.out.println((i + 1) + " : " + room.getObject(i).getName());
+            }
+
             System.out.println("Q : quit ");
             System.out.println("enter a number of object you wish to inspect: ");
 
