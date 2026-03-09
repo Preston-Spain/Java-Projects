@@ -28,7 +28,7 @@ public class GameFunctions {
         }
     }
     
-    public void inspect(Door door, Player player) {
+    public static void inspect(Door door, Player player) {
         System.out.println(door.getDescription());
         
         if (door.isOpen()) {
@@ -49,7 +49,7 @@ public class GameFunctions {
         }
     }
     
-    public void inspect(Chest chest, Player player) {
+    public static void inspect(Chest chest, Player player) {
         chest.showContents();
         
         if (!chest.isLocked() && easyYesNo("Would you like to take something?")) {
@@ -65,10 +65,6 @@ public class GameFunctions {
                 }
             }
         }
-    }
-
-    public void inspect(SpecialObject object) {
-        
     }
     
     public static void render(Player player) {
@@ -86,14 +82,21 @@ public class GameFunctions {
         }
 
         while (true) {
+            //TODO
             System.out.println("Q : quit ");
             System.out.println("enter a number of object you wish to inspect: ");
 
             String ip = input.nextLine();
             try {
-                int i = Integer.parseInt(ip) - 1;
-                inspect(room.getObject(i));
-            } catch (Exception e) {
+                SpecialObject speObj = room.getObject(Integer.parseInt(ip) - 1);
+                
+                switch (speObj) {
+                    case Door door -> GameFunctions.inspect(door, player);
+                    case Chest chest -> GameFunctions.inspect((Chest) speObj, player);
+                    default -> System.err.println("Erron in inspection of Special object" + speObj + " in update function");
+                }
+                
+            } catch (NumberFormatException e) {
                 if (ip.toLowerCase().equals("q")) {
                     return true;
                 } else {
@@ -103,5 +106,10 @@ public class GameFunctions {
         }
 
         return false;
+    }
+
+    private static void test(Player player) {
+        System.out.println("Player position room name: " + player.getCurrentRoom().getName());
+        // System.out.println("Player position room name: " + player.getCurrentRoom().getName());
     }
 }
