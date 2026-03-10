@@ -31,8 +31,8 @@ public class Library {
         startRoom.addObject(keyChest);
         // ending room
         // Initialize chest contents
-        testChest.addItem(ironSword);
-        testChest.addItem(testKeyUnlock);
-        keyChest.addItem(testKey);
+        testChest.appendItem(ironSword);
+        testChest.appendItem(testKeyUnlock);
+        keyChest.appendItem(testKey);
     }
 }

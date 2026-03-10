@@ -2,7 +2,6 @@ package TextRPG.Util;
 
 import TextRPG.Util.Property.Chest;
 import TextRPG.Util.Property.Door;
-import TextRPG.Util.Property.Item;
 import TextRPG.Util.Property.Player;
 import TextRPG.Util.Property.Room;
 import TextRPG.Util.Property.SpecialObject;
@@ -13,10 +12,6 @@ public class GameFunctions {
 
     public static boolean easyYesNo(String dialog) {
         System.out.println(dialog + " (Y/N)");
-        return easyYesNo();
-    }
-
-    public static boolean easyYesNo() {
         while (true) {
             String userIp = input.nextLine().trim().toUpperCase();
             if ("Y".equals(userIp)) {
@@ -25,6 +20,34 @@ public class GameFunctions {
                 return false;
             }
             System.out.println("Please enter Y or N: ");
+        }
+    }
+
+    public static int easyNumber(String dialog, int max) {
+        System.out.println(dialog + " num: ");
+        while (true) {
+            String userIp = input.nextLine().trim();
+            try {
+                int i = Integer.parseInt(userIp);
+                if (i < max) {
+                    return i;
+                }
+            } finally {
+            }
+            System.out.println("Please enter a number between (0 & " + max + "): ");
+        }
+    }
+
+    public static int easyNumber(String dialog, String falseReply) {
+        System.out.println(dialog + " num: ");
+        while (true) {
+            String userIp = input.nextLine().trim();
+            try {
+                int i = Integer.parseInt(userIp);
+                return i;
+            } finally {
+                System.out.println(falseReply);
+            }
         }
     }
 
@@ -55,20 +78,23 @@ public class GameFunctions {
 
     public static void inspect(Chest chest, Player player) {
         System.out.println(chest.getDescription());
-
+        debugPrint("Inspect - Chest: 1");
         if (chest.getKey() != null || !chest.isLocked()) {
+            debugPrint("Inspect - Chest: 2: True");
             chest.showContents(player);
         } else {
+            debugPrint("Inspect - Chest: 2: False");
             if (easyYesNo("Would you like to try to unlock it?")) {
+                debugPrint("Inspect - Chest: 3: true");
                 chest.showContents(player);
             }
         }
     }
 
     public static void inspect(SpecialObject object, Player player) {
-        if (object instanceof Chest) {
+        if (object instanceof Chest || object.getClass() == Chest.class) {
             inspect((Chest) object, player);
-        } else if (object instanceof Door) {
+        } else if (object instanceof Door || object.getClass() == Door.class) {
             inspect((Door) object, player);
         } else {
             System.out.println(object.getDescription());

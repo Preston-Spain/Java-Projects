@@ -4,3 +4,5 @@
 # Start with "Starting-VS"
 
 # Always remember to read
+
+javac -d . \*.java

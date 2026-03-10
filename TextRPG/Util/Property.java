@@ -279,38 +279,57 @@ public class Property {
             this.itemList = new ArrayList<>();
         }
 
-        public void addItem(Item item) {
-            itemList.add(item);
-        }
-
-        public void removeItem(int index) {
-            if (index >= 0 && index < itemList.size()) {
-                itemList.remove(index); // removes and returns
+        public void influence(Player player) {
+            if (showContents(player)) {
+                GameFunctions.easyNumber("Chose a ", itemList.size());
             }
         }
 
-        public Item takeItem(int index) {
-            if (index >= 0 && index < itemList.size()) {
-                return itemList.remove(index); // removes and returns
-            }
-            return null;
-        }
-
-        public void showContents(Player player) {
+        public boolean showContents(Player player) {
             System.out.println("Contents of " + name);
 
             if (!isLocked) {
                 if (itemList.isEmpty()) {
                     System.out.println("The chest is empty.");
+                    return false;
                 } else {
                     for (int i = 0; i < itemList.size(); i++) {
                         System.out.println(i + ": " + itemList.get(i).getName());
                     }
                 }
+                return true;
             } else {
                 System.out.println(name + " is locked.");
                 System.out.println("You need the " + key.getName() + ".");
+                return false;
             }
+        }
+
+        public void addItem(Item item, int index) {
+            itemList.add(index, item);
+        }
+
+        public void appendItem(Item item) {
+            itemList.addLast(item);
+        }
+
+        public void removeItem(int index) {
+            if (index >= 0 && index < itemList.size()) {
+                itemList.remove(index); // removes
+            }
+        }
+
+        public boolean takeItem(int index, Player player) {
+            if (index >= 0 && index < itemList.size()) {
+                player.addItem(itemList.get(index));
+                itemList.remove(index);
+                return true;
+            }
+            return false;
+        }
+
+        public int itemListLenght() {
+            return itemList.size();
         }
 
         public boolean isLocked() {
