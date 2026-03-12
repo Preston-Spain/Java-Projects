@@ -94,15 +94,33 @@ public class Property {
                 System.out.println("=== Inventory ===");
                 for (int i = 0; i < inventory.size(); i++) {
                     Item item = inventory.get(i);
-                    String type = item instanceof Weapon ? "Weapon" : item instanceof Key ? "Key" : "Item";
-                    System.out.printf("%d: %s (%s) - %s%n",
-                            i, item.getName(), type, item.getDescription());
 
-                    if (item instanceof Weapon || item.getClass() == Weapon.class) {
+                if (item.getName() == null) {
+                    System.err.println("inventory slot " + i + " of player is null");
+                }
+
+                    String type = item instanceof Weapon ? "Weapon" :
+                                item instanceof Key ? "Key" : "Item";
+                    System.out.printf("%d: %s (%s) - %s%n", 
+                        i, item.getName(), type, item.getDescription());
+                    
+                    if (item instanceof Weapon) { // use "item.getClass() == Weapon.class" if it stops working properly
                         Weapon weapon = (Weapon) item;
-                        System.out.printf("   Damage: %d, Crit Rate: %d%%%n",
-                                weapon.getDamage(), weapon.getCritRate());
+                        System.out.printf("   Damage: %d, Crit Rate: %d%%%n", 
+                            weapon.getDamage(), weapon.getCritRate());
+                    } else if (item instanceof Key) {
+                        Key key = (Key) item;
+                        //TODO
+                    } else {
+                        System.err.println("Item type does not exist.");
                     }
+
+                    // switch (item.getClass()) {
+                    //     case Weapon.class  -> { Weapon weapon = (Weapon) item;
+                    //         System.out.printf("   Damage: %d, Crit Rate: %d%%%n", 
+                    //         weapon.getDamage(), weapon.getCritRate());
+                    //         }
+                    // }
                 }
                 System.out.printf("Space: %d/%d%n", inventory.size(), MAX_INVENTORY_SIZE);
             }
@@ -235,6 +253,11 @@ public class Property {
             } else {
                 return null;
             }
+        }
+
+        public Room[] getRooms() {
+            Room[] arrayRoom = {room1, room2};
+            return arrayRoom;
         }
 
         @Override
